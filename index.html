@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+		<title>Dapp</title>
+		<script src="libs/nebPay.js"></script>
+		<script src="libs/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+
+<h2>Vote</h2>
+<form id="voteSubmit">
+  <input type="radio" name="vote" value="Brazil"> Brazil<br>
+  <input type="radio" name="vote" value="Argentina"> Argentina <br>
+ 	<input type="radio" name="vote" value="France"> France <br>
+  <input type="radio" name="vote" value="Germany"> Germany<br>
+	<input type="radio" name="vote" value="Portugal"> Portugal <br>
+  <input type="submit" value="Submit">
+</form>
+
+<p>You voted for: </p>
+<button type="button" id="btnGetVote"> Refresh</button>
+<p id="myVote"></p>
+
+<script>
+
+	var contract_address = "n1kAZApi95te5nzMe8shjatHk7nhWdMsCqK"
+	var txhash = null;
+	var NebPay = require("nebpay");
+	var nebPay = new NebPay();
+
+	$( document ).ready(function() {
+		if(typeof(webExtensionWallet) === "undefined"){
+		alert ("Extension wallet is not installed, please install it first.")
+		}
+		$('#btnGetVote').click(GetVote);
+	});
+
+	$('#voteSubmit').submit(function(vote){
+		var vote = $(':radio[name=vote]:checked').val();
+		nebPay.call(contract_address,0,"submitVote",JSON.stringify([vote]),{
+			qrcode: {
+				showQRCode: false,
+				completeTip: undefined, 
+				cancelTip: undefined,
+				container: undefined
+		 	},
+			callback: NebPay.config.testnetUrl,
+			listener: VoteSubmitted
+		});		
+		event.preventDefault();
+	});
+
+	function VoteSubmitted(resp){
+		txhash = resp.txhash;
+		console.log("txhash => " + txhash);
+	}
+	function GetVote(){
+		nebPay.simulateCall(contract_address,0,"getVote",JSON.stringify([txhash]),{
+			callback: NebPay.config.testnetUrl,
+			listener: function(resp){
+				var response = JSON.parse(resp.result);
+				if(response){
+					$('#myVote').text(reseponse.vote);
+				}
+				else{
+					$('#myVote').text("null");
+				}
+			}
+		});
+		event.preventDefault();
+	}
+
+</script>
+
+</body>
+</html>
