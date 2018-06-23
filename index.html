@@ -7,48 +7,54 @@
 		<title>Dapp</title>
 		<script src="libs/nebPay.js"></script>
 		<script src="libs/jquery-3.1.1.min.js"></script>
+		<link rel="stylesheet" href="site.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 </head>
 
 <body>
 	<div class="container">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-				<a class="navbar-brand" href="#">Questions - Daaps NEB</a>
-				<div class="collapse navbar-collapse" id="navbarNav">
-					<ul class="navbar-nav">
-	<!-- 						<li class="nav-item">
-						<a class="nav-link disabled" href="#">My Questions</a>
-					</li> -->
-					</ul>
-				</div>
-				<button class="btn btn-sm btn-primary" type="button">New Question</button> &nbsp;
-				<button class="btn btn-sm btn-secondary" type="button">My Questions</button>
-			</nav>
-			<br>
-			<br>
-			<br>
-				
-			<div class="row">
-				<div class="col-4">
-					<div class="question-box">
-						<h4>¿Quien ganará el mundial?</h4>
-						<form id="voteSubmit">
-								<input type="radio" name="vote" value="Brazil"> Brazil<br>
-								<input type="radio" name="vote" value="Argentina"> Argentina <br>
-								<input type="radio" name="vote" value="France"> France <br>
-								<input type="radio" name="vote" value="Germany"> Germany<br>
-								<input type="radio" name="vote" value="Portugal"> Portugal <br>
-								<button type="submit" class="btn btn-primary">Vote</button>
-						</form>
-					</div>
-				</div>
+			<a class="navbar-brand" href="#">Questions - Daaps NEB</a>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav">
+				</ul>
 			</div>
-				
-			<p>You voted for: </p>
-			<button type="button" id="btnGetVote"> Refresh</button>
-			<p id="myVote"></p>
-	</div>
+			<button class="btn btn-sm btn-primary" type="button">New Question</button> &nbsp;
+			<button class="btn btn-sm btn-secondary" type="button">My Questions</button>
+		</nav>	
+		
+		<br>
+		<br>
+		<br>
 
+				<!--<div class="row">
+					<div class="col-4">
+						<div class="question-box">
+							<h4>¿Quien ganará el mundial?</h4>
+							<div class="radio">
+								<label><input type="radio" value= "Brazil" name="vote">Brazil</label>
+							</div>
+							<div class="radio">
+								<label><input type="radio" value= "Argentina" name="vote">Argentina</label>
+							</div>
+							<div class="radio">
+								<label><input type="radio" value= "France" name="vote" >France</label>
+							</div>
+							<div class="radio">
+								<label><input type="radio" value= "Germany" name="vote" >Germany</label>
+								</div>
+								<div class="radio">
+								<label><input type="radio" value= "Portugal" name="vote" >Portugal</label>
+								</div>
+							<button type="button" class="btn btn-primary btn-vote">Vote</button>
+						</div>
+					</div>
+				</div> -->
+				
+			<div class="row questions">
+
+			</div>
+	</div>
 
 <script>
 
@@ -62,8 +68,22 @@
 		alert ("Extension wallet is not installed, please install it first.")
 		}
 		$('#btnGetVote').click(GetVote);
+
 		GetQuestion();
-	});
+
+	}); //End document.ready
+
+	function SubmitVote(){
+		var question_id = this.value;
+		var parentId = $(this).parent().attr('id');
+		var answer = $('#' + parentId + ' ' + 'input[name=vote]:checked').val(); 
+		if(answer != undefined){
+			
+		}
+		else{
+			alert("You must select an answer")
+		}
+	}
 
 	function GetQuestion(){
 		nebPay.simulateCall(contract_address,0,"getQuestion",null,{
@@ -79,8 +99,40 @@
 	}
 
 	function ShowQuestion(resp){
+
 		var question = JSON.parse(resp.result);
-		alert(question);
+
+		question.forEach(element => {
+			console.log(element);
+			
+			var idSelector = "item-" + element.question_id;
+
+			//Crear columna
+			$('.questions').append(function(){				
+				return `<div class="col-4"><form id="${idSelector}"></form></div>`
+			});
+
+			//Agregar titulo
+			$('#' + idSelector).append(function(){
+				return "<h5>" + element.title + "</h5>";
+			});
+
+			//Agregar Respuestas  //<label><input type="radio" value= "Brazil" name="vote">Brazil</label>
+ 			element.answers.forEach(a => {
+				 $('#' + idSelector).append(function(){
+					 var count_votes = `<i><small>(${a.count_votes} votes)</small></i>`
+					 return `<div class="radio"><label><input type="radio" value="${a.item}" name="vote">${a.item} ${count_votes}</label></div>`
+				 });
+			});
+
+			//Agregar Boton
+			$('#' + idSelector).append(function(){
+				return `<button type="button" class="btn btn-primary btn-vote" value="${element.question_id}">Vote Now</button>`
+			})
+		});
+
+		//Asignar evento al boton
+		$('.btn-vote').on("click", SubmitVote);
 	}
 
 	$('#voteSubmit').submit(function(vote){
