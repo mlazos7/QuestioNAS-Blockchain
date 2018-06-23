@@ -7,168 +7,137 @@
 		<title>Dapp</title>
 		<script src="libs/nebPay.js"></script>
 		<script src="libs/jquery-3.1.1.min.js"></script>
+		<script src="libs/site.js"></script>
 		<link rel="stylesheet" href="site.css">
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
 </head>
 
 <body>
 	<div class="container">
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a class="navbar-brand" href="#">Questions - Daaps NEB</a>
+			<a class="navbar-brand" href="#">QuestioNAS - Daaps</a>
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav">
 				</ul>
 			</div>
-			<button class="btn btn-sm btn-primary" type="button">New Question</button> &nbsp;
+			<button class="btn btn-sm btn-primary" type="button" data-toggle="modal" data-target="#exampleModal" >
+				New Question
+			</button> &nbsp;
 			<button class="btn btn-sm btn-secondary" type="button">My Questions</button>
 		</nav>	
 		
 		<br>
 		<br>
 		<br>
-
-				<!--<div class="row">
-					<div class="col-4">
-						<div class="question-box">
-							<h4>¿Quien ganará el mundial?</h4>
-							<div class="radio">
-								<label><input type="radio" value= "Brazil" name="vote">Brazil</label>
-							</div>
-							<div class="radio">
-								<label><input type="radio" value= "Argentina" name="vote">Argentina</label>
-							</div>
-							<div class="radio">
-								<label><input type="radio" value= "France" name="vote" >France</label>
-							</div>
-							<div class="radio">
-								<label><input type="radio" value= "Germany" name="vote" >Germany</label>
-								</div>
-								<div class="radio">
-								<label><input type="radio" value= "Portugal" name="vote" >Portugal</label>
-								</div>
-							<button type="button" class="btn btn-primary btn-vote">Vote</button>
-						</div>
-					</div>
-				</div> -->
 				
-			<div class="row questions">
+		<div class="row questions">
+		</div>
 
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h5 class="modal-title" id="exampleModalLabel">Create Question</h5>
+			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			  </button>
 			</div>
-	</div>
+			<div class="modal-body">
+			<!-- <form> -->
+<!-- 					<div class="form-group">
+						<label for="exampleInputEmail1">
+								Write your question</label>
+						<input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Do you like QuestioNAS ?">
+						<small id="emailHelp" class="form-text text-muted">Max 240 characters</small>
+					</div> -->
+					
+					<div class="row">
+							<div class="control-group" id="fields">
+								
+								<div class="controls"> 
+									<form role="form" id="question-form" autocomplete="off">
+											<label>Title</label>
+											<div class="input-group">
+													<input class="form-control" name="title" type="text" placeholder="Do you like QuestioNAS" />
+											</div>
+											<small>Max 240 characteres</small>
+											<br>
+											<br>
+										<label id="label-dynamic-field">Your answers</label>
+										<div class="entry input-group col-xs-3">
+											<input class="form-control" name="fields" type="text" placeholder="Yes..." />
+											&nbsp;
+											<span class="input-group-btn">
+												<button class="btn btn-success btn-add" type="button">
+													<span class="fas fa-plus"></span>
+												</button>
+											</span>
+										</div>
+									</form>
+								
+								<small class="span-fields">Press <span class="fas fa-plus"></span> to add another form field. You must add at least two answers</small>
+								</div>
+							</div>
+						</div>
+						
+	<!-- 		</form> -->
+			</div>
+			<div class="modal-footer">
+			  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			  <button id="btn-submit-question" type="button" class="btn btn-primary">Submit Question</button>
+			</div>
+		  </div>
+		</div>
+	  </div>
+
+	</div> <!-- End container -->
 
 <script>
 
-	var contract_address = "n1zsH1HnWbQPw7rLRxc9CRw5gjT6qfzyt7P"
-	var txhash = null;
-	var NebPay = require("nebpay");
-	var nebPay = new NebPay();
+		var contract_address = "n1zsH1HnWbQPw7rLRxc9CRw5gjT6qfzyt7P"
+		var NebPay = require("nebpay");
+		var nebPay = new NebPay();
+	
+		$( document ).ready(function() {
 
-	$( document ).ready(function() {
-		if(typeof(webExtensionWallet) === "undefined"){
-		alert ("Extension wallet is not installed, please install it first.")
-		}
-		$('#btnGetVote').click(GetVote);
-
-		GetQuestion();
-
-	}); //End document.ready
-
-	function SubmitVote(){
-		var question_id = this.value;
-		var parentId = $(this).parent().attr('id');
-		var answer = $('#' + parentId + ' ' + 'input[name=vote]:checked').val(); 
-		if(answer != undefined){
-			
-		}
-		else{
-			alert("You must select an answer")
-		}
-	}
-
-	function GetQuestion(){
-		nebPay.simulateCall(contract_address,0,"getQuestion",null,{
-			qrcode: {
-				showQRCode: false,
-				completeTip: undefined, 
-				cancelTip: undefined,
-				container: undefined
-		 	},
-			callback: "https://pay.nebulas.io/api/pay",
-			listener: ShowQuestion	
-		});
-	}
-
-	function ShowQuestion(resp){
-
-		var question = JSON.parse(resp.result);
-
-		question.forEach(element => {
-			console.log(element);
-			
-			var idSelector = "item-" + element.question_id;
-
-			//Crear columna
-			$('.questions').append(function(){				
-				return `<div class="col-4"><form id="${idSelector}"></form></div>`
-			});
-
-			//Agregar titulo
-			$('#' + idSelector).append(function(){
-				return "<h5>" + element.title + "</h5>";
-			});
-
-			//Agregar Respuestas  //<label><input type="radio" value= "Brazil" name="vote">Brazil</label>
- 			element.answers.forEach(a => {
-				 $('#' + idSelector).append(function(){
-					 var count_votes = `<i><small>(${a.count_votes} votes)</small></i>`
-					 return `<div class="radio"><label><input type="radio" value="${a.item}" name="vote">${a.item} ${count_votes}</label></div>`
-				 });
-			});
-
-			//Agregar Boton
-			$('#' + idSelector).append(function(){
-				return `<button type="button" class="btn btn-primary btn-vote" value="${element.question_id}">Vote Now</button>`
-			})
-		});
-
-		//Asignar evento al boton
-		$('.btn-vote').on("click", SubmitVote);
-	}
-
-	$('#voteSubmit').submit(function(vote){
-		var vote = $(':radio[name=vote]:checked').val();
-		nebPay.call(contract_address,0,"submitVote",JSON.stringify([vote]),{
-			qrcode: {
-				showQRCode: false,
-				completeTip: undefined, 
-				cancelTip: undefined,
-				container: undefined
-		 	},
-			callback: NebPay.config.testnetUrl,
-			listener: VoteSubmitted
-		});		
-		event.preventDefault();
-	});
-
-	function VoteSubmitted(resp){
-		txhash = resp.txhash;
-		console.log("txhash => " + txhash);
-	}
-	function GetVote(){
-		nebPay.simulateCall(contract_address,0,"getVote",JSON.stringify([txhash]),{
-			callback: NebPay.config.testnetUrl,
-			listener: function(resp){
-				var response = JSON.parse(resp.result);
-				if(response){
-					$('#myVote').text(reseponse.vote);
-				}
-				else{
-					$('#myVote').text("null");
-				}
+			if(typeof(webExtensionWallet) === "undefined"){
+			alert ("Extension wallet is not installed, please install it first.")
 			}
+
+			GetQuestion();
+
+			$('#btn-submit-question').on('click',function(){
+				$('#question-form').submit();
+			})
+
+			$('#question-form').on('submit',SubmitQuestion)
 		});
-		event.preventDefault();
-	}
+
+		$(function()
+		{
+			$(document).on('click', '.btn-add', function(e)
+			{
+				e.preventDefault();
+
+				var controlForm = $('.controls form:first'),
+					currentEntry = $(this).parents('.entry:first'),
+					newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+				newEntry.find('input').val('');
+				controlForm.find('.entry:not(:last) .btn-add')
+					.removeClass('btn-add').addClass('btn-remove')
+					.removeClass('btn-success').addClass('btn-danger')
+					.html('<span class="fas fa-minus"></span>');
+			}).on('click', '.btn-remove', function(e)
+			{
+				$(this).parents('.entry:first').remove();
+
+				e.preventDefault();
+			});
+		});
+
 
 </script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
