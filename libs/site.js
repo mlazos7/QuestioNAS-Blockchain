@@ -1,3 +1,64 @@
+var contract_address = "n1n6TjekYfXGNkXWFqCBL7Y4eR9TU2bZB18"
+var NebPay = require("nebpay");
+var nebPay = new NebPay();
+
+$(document).ready(function () {
+
+    if (typeof (webExtensionWallet) === "undefined") {
+        alert("Extension wallet is not installed, please install it first.")
+    }
+
+    GetQuestion();
+
+    $('#btn-submit-question').on('click', function () {
+        $('#question-form').submit();
+    })
+
+    $('#question-form').on('submit', SubmitQuestion)
+
+    $('#btn-refresh').click(function(){
+        window.location.reload();
+    })
+
+    $('.btn-add').click(function(e){
+        e.preventDefault();
+
+        var controlForm = $('.controls form:first'),
+            currentEntry = $(this).parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+        newEntry.find('input').val('');
+        controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="fas fa-minus"></span>');
+    }).on('click', '.btn-remove', function (e) {
+        $(this).parents('.entry:first').remove();
+
+        e.preventDefault();
+    });
+});
+
+$(function () {
+    $(document).on('click', '.btn-add', function (e) {
+        e.preventDefault();
+
+        var controlForm = $('.controls form:first'),
+            currentEntry = $(this).parents('.entry:first'),
+            newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+        newEntry.find('input').val('');
+        controlForm.find('.entry:not(:last) .btn-add')
+            .removeClass('btn-add').addClass('btn-remove')
+            .removeClass('btn-success').addClass('btn-danger')
+            .html('<span class="fas fa-minus"></span>');
+    }).on('click', '.btn-remove', function (e) {
+        $(this).parents('.entry:first').remove();
+
+        e.preventDefault();
+    });
+});
+
 function GetQuestion(){
     nebPay.simulateCall(contract_address,0,"getQuestion",null,{
         qrcode: {
@@ -22,7 +83,7 @@ function ShowQuestion(resp){
 
         //Crear columna
         $('.questions').append(function(){				
-            return `<div class="col-4"><form id="${idSelector}"></form></div>`
+            return `<div class="col-4"><form class="col-question" id="${idSelector}"></form></div>`
         });
 
         //Agregar titulo
@@ -40,7 +101,7 @@ function ShowQuestion(resp){
 
         //Agregar Boton
         $('#' + idSelector).append(function(){
-            return `<button type="button" class="btn btn-primary btn-vote" value="${element.question_id}">Vote Now</button>`
+            return `<button type="button" class="btn btn-info btn-vote" value="${element.question_id}">Vote Now</button>`
         })
     });
 
@@ -65,7 +126,7 @@ function SubmitVote(){
              },
             callback: "https://pay.nebulas.io/api/pay",
             listener: function(resp){
-                alert(resp.txhash);
+                console.log("SubmitVote tx => " + resp.txhash);
             }
         });		 
     }
@@ -106,8 +167,8 @@ function SubmitQuestion(e){
          },
         callback: "https://pay.nebulas.io/api/pay",
         listener: function(resp){
-            alert(resp.txhash);
+            $('#add-question-modal').modal('toggle')
+            console("SubmitQuestion tx => " + resp.txhash);
         }
     });		 
-
 }

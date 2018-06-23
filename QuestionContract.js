@@ -1,6 +1,6 @@
 "use strict";
 
-//var contract_address = "n1zsH1HnWbQPw7rLRxc9CRw5gjT6qfzyt7P";
+//var contract_address = "n1n6TjekYfXGNkXWFqCBL7Y4eR9TU2bZB18";
 
 var AnswerItem = function(item){
     this.item = item;
@@ -24,7 +24,7 @@ var QuestionContract = function () {
 
 QuestionContract.prototype = {
 
-    init: function() { //Init is called once, when the contract is deployed
+    init: function() {
 
         this.question_id = 1;
 
@@ -32,7 +32,7 @@ QuestionContract.prototype = {
         var initialQuestion = new QuestionItem(
             this.question_id,
             Blockchain.transaction.from,
-            "Would you like to try 'Votes', a Dapps using NAS red",
+            "Would you like to try 'QuestioNAS' ?",
             new Array(new AnswerItem("Yes"),new AnswerItem("No"))
         );
 
@@ -76,7 +76,7 @@ QuestionContract.prototype = {
 
     getQuestion: function (){
         var question = [];
-        for(var i = 1 ; i < this.question_id; i++){
+        for(var i = this.question_id -1 ; i >= 1 ; i--){
             question.push(this.hash_question.get(i));
         }      
         return question;

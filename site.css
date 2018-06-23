@@ -1,3 +1,7 @@
+body{
+    background-color: #17a2b812 !important;
+}
+
 h5{
     padding-bottom: 10px;
 }
@@ -22,4 +26,17 @@ margin-left: 16px;
 
 .span-fields{
 margin-left: 16px;
+}
+
+.col-question{
+    margin-bottom: 10%;
+}
+
+.btn-success{
+    border-color: #17a2b8 !important;
+    background-color: #17a2b8 !important;
+}
+.btn-remove{
+    border-color: #6c757d !important;
+    background-color: #6c757d !important;
 }
