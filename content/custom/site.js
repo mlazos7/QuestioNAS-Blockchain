@@ -5,12 +5,12 @@ var nebPay = new NebPay()
 $(document).ready(function () {
 
     if (typeof (webExtensionWallet) === "undefined") {
-        alert("Extension wallet is not installed, please install it first.");
+        $('#no-extension').css('display','block');
+        $('#no-extension').css('background','#ffcece');
+        return;
     };
 
-    $('#btn-refresh').click(function () {
-        window.location.reload();
-    });
+    $('#loading-question').css('display', 'block');
 
     $('#btn-submit-question').on('click', function () {
         $('#question-form').submit();

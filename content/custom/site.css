@@ -32,6 +32,10 @@ margin-left: 16px;
 }
 
 .img-center{
-  display: block;
+  display: none;
   margin:  0 auto;
+}
+
+#no-extension{
+    display: none;
 }
