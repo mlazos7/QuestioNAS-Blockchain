@@ -1,28 +1,27 @@
-var contract_address = "n1n6TjekYfXGNkXWFqCBL7Y4eR9TU2bZB18"
+var contract_address = "n1nPMtWh2KKZCpXsd316WvAf9iwYX8C4ZDz"
 var NebPay = require("nebpay")
 var nebPay = new NebPay()
 
 $(document).ready(function () {
 
     if (typeof (webExtensionWallet) === "undefined") {
-        alert("Extension wallet is not installed, please install it first.")
+        alert("Extension wallet is not installed, please install it first.");
     };
-
-    GetQuestion();
-
-    /*     $('#btn-submit-question').on('click', function () {
-            $('#question-form').submit();
-        });
-    
-        $('#question-form').on('submit', SubmitQuestion) */
 
     $('#btn-refresh').click(function () {
         window.location.reload();
     });
-});
 
-$(function () {
+    $('#btn-submit-question').on('click', function () {
+        $('#question-form').submit();
+    });
+
+    $('#question-form').on('submit', SubmitQuestion);
+
+    GetQuestion();
+
     $(document).on('click', '.btn-add', function (e) {
+
         e.preventDefault();
 
         var controlForm = $('.controls form:first'),
@@ -35,11 +34,12 @@ $(function () {
             .removeClass('btn-success').addClass('btn-danger')
             .html('<span class="fas fa-minus"></span>');
     }).on('click', '.btn-remove', function (e) {
-        $(this).parents('.entry:first').remove();
 
+        $(this).parents('.entry:first').remove();
         e.preventDefault();
     });
 });
+
 
 function GetQuestion() {
     nebPay.simulateCall(contract_address, 0, "getQuestion", null, {
@@ -56,7 +56,7 @@ function GetQuestion() {
 
 function ShowQuestion(resp) {
 
-    $('#loading-question').css('display','none');
+    $('#loading-question').css('display', 'none');
 
     var question = JSON.parse(resp.result);
 
@@ -65,33 +65,33 @@ function ShowQuestion(resp) {
         var idSelector = "item-" + element.question_id;
 
         //Crear columna y tarjeta
-        $('.row').append(function () {
-            return `<div class="col-md-4"><div class="card mb-4 box-shadow" id="card-${idSelector}"></div></div>`
+        $('#row-questions').append(function () {
+            return `<div class="col-md-4"><div class="card mb-4 box-shadow" id="card-${idSelector}"></div></div>`;
         });
 
         //Agregar header con el titulo de la pregunta
         $('#card-' + idSelector).append(function () {
-            return '<div class="card-header text-white bg-secondary"><p><b>' + element.title + '</b></p></div>'
+            return '<div class="card-header text-white bg-secondary"><p><b>' + element.title + '</b></p></div>';
         });
 
         //Crear inputs de respuestas
-        var answersHtml = ""
+        var answersHtml = "";
         element.answers.forEach(a => {
-                var count_votes = `<i><small>(${a.count_votes} votes)</small></i>`
-                answersHtml += `<div class="radio"><label><input type="radio" value="${a.item}" name="vote">${a.item} ${count_votes}</label></div>`
+            var count_votes = `<i><small>(${a.count_votes} votes)</small></i>`
+            answersHtml += `<div class="radio"><label><input type="radio" value="${a.item}" name="vote">${a.item} ${count_votes}</label></div>`;
         });
 
         //Agregar card-body
         $('#card-' + idSelector).append(function () {
-            return '<div class="card-body"><form class="form-vote">'+
-                    answersHtml +
-                    `<input name="question_id" type="hidden" value="${element.question_id}">`+
-                    '<div class="d-flex justify-content-between align-items-center">'+
-                    '<button type="submit" class="btn btn-sm btn-info btn-vote">Vote Now</button>'+
-                    `<small class="text-muted">Total votes: ${element.total_votes}</small>`+
-                    '</div>'+
-                    '</form></div>';
-        }); 
+            return '<div class="card-body"><form class="form-vote">' +
+                answersHtml +
+                `<input name="question_id" type="hidden" value="${element.question_id}">` +
+                '<div class="d-flex justify-content-between align-items-center">' +
+                '<button type="submit" class="btn btn-sm btn-info btn-vote">Vote Now</button>' +
+                `<small class="text-muted">Total votes: ${element.total_votes}</small>` +
+                '</div>' +
+                '</form></div>';
+        });
     });
 
     //Asignar handler on submite al form 
@@ -99,7 +99,7 @@ function ShowQuestion(resp) {
 }
 
 function SubmitVote(e) {
-    
+
     e.preventDefault();
     //question_id
     var question_id = $(this).find('input[name=question_id]').val();
@@ -122,22 +122,27 @@ function SubmitVote(e) {
         });
     }
     else {
-        alert("You must select an answer")
+        alert("You must select an answer");
     }
 }
 
 function SubmitQuestion(e) {
 
     e.preventDefault();
-    var title = $("#question-form input[name=title]:first").val();
+    var title = $(this).find("input[name=title]:first").val();
     if (title === undefined || title === "") {
-        alert("Error: You must enter the question")
+        alert("Error: You must enter the question");
+        return;
+    }
+    if(title.length >= 100){
+        alert("Plase enter a question with 100 characteres max");
         return;
     }
 
-    var fields = $("#question-form :input[name=fields]").serializeArray()
+    var fields = $(this).find(':input[name=fields]').serializeArray();
 
-    var answers = []
+    //Agregar las respuesta a un array, excepto las vacias.
+    var answers = [];
     fields.forEach(e => {
         if (e.value !== "") {
             answers.push(e.value)
@@ -145,7 +150,7 @@ function SubmitQuestion(e) {
     });
 
     if (answers.length < 2 || answers.length > 5) {
-        alert("Error: You must enter between 2 and 5 answers")
+        alert("Error: You must enter between 2 and 5 answers");
         return;
     }
 
@@ -158,8 +163,9 @@ function SubmitQuestion(e) {
         },
         callback: "https://pay.nebulas.io/api/pay",
         listener: function (resp) {
-            $('#add-question-modal').modal('toggle')
-            console("SubmitQuestion tx => " + resp.txhash);
+            $('#add-question-modal').modal('toggle');
+            alert("Your transaction has been submitted");
+            console.log("SubmitQuestion tx => " + resp.txhash);
         }
     });
 }

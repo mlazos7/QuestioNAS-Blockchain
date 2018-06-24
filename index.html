@@ -2,42 +2,59 @@
 <html lang="en">
 
 <head>
-	<!-- Required meta tags -->
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<title>Dapp</title>
-	<script src="libs/nebPay.js"></script>
-	<script src="libs/jquery-3.1.1.min.js"></script>
-	<script src="libs/site.js"></script>
-	<link rel="stylesheet" href="site.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-	 crossorigin="anonymous">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
-	 crossorigin="anonymous">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Matias Lazos">
+  <link rel="icon" type="image/png" sizes="32x32" href="content/img/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="content/img/favicon-16x16.png">
+
+  <title>QuestioNAS</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="content/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <!--   Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+  <!-- Custom styles for this bootstrap template -->
+  <link href="content/bootstrap/album.css" rel="stylesheet">
+  <!-- My Custom styles -->
+  <link href="content/custom/site.css" rel="stylesheet" >
 </head>
 
 <body>
-	<div class="container">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-			<a class="navbar-brand" href="#">QuestioNAS - Daaps</a>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav">
-				</ul>
-			</div>
-			<button class="btn btn-sm btn-info" type="button" data-toggle="modal" data-target="#add-question-modal">
-				New Question
-			</button> &nbsp;
-			<button class="btn btn-sm btn-secondary" id="btn-refresh" type="button">Refresh</button>
-		</nav>
+  <header>
+    <div class="navbar navbar-dark bg-dark box-shadow">
+      <div class="container d-flex justify-content-between">
+        <a href="#" class="navbar-brand d-flex align-items-center">
+          <strong>QuestioNAS</strong>
+        </a>
+      </div>
+    </div>
+  </header>
 
-		<br>
-		<br>
-		<br>
+  <main role="main">
 
-		<div class="row questions">
-		</div>
+    <section class="jumbotron text-center">
+      <div class="container">
+        <h1 class="jumbotron-heading">QuestioNAS - Dapp</h1>
+        <p class="lead text-muted">
+          Vote for any question or create your own question. Keep in mind that you can only vote one time per question and can't be change it.</p>
+        <p>
+          <button class="btn btn-info my-2" data-toggle="modal" data-target="#add-question-modal"> Create Question </button>
+          <button class="btn btn-secondary my-2" id="btn-refresh">Refresh</button>
+        </p>
+      </div>
+    </section>
 
-		<!-- Modal -->
+    <div class="album py-5 bg-light">
+      <img src="content/img/loading.gif" id="loading-question" width="80" class="img-center">
+      <div class="container">
+        <div class="row" id="row-questions">
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal -->
 		<div class="modal fade" id="add-question-modal" tabindex="-1" role="dialog" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -57,7 +74,7 @@
 										<div class="input-group">
 											<input class="form-control" name="title" type="text" placeholder="Do you like QuestioNAS" />
 										</div>
-										<small>Max 240 characteres</small>
+										<small>Max 100 characteres</small>
 										<br>
 										<br>
 										<label id="label-dynamic-field">Your answers</label>
@@ -84,15 +101,39 @@
 			</div>
 		</div>
 
-	</div>
+  </main>
 
-	<!-- End container -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	 crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-	 crossorigin="anonymous"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
-	 crossorigin="anonymous"></script>
+  <footer class="text-muted">
+    <div class="container">
+      <p class="float-right">
+        <a href="#">Back to top</a>
+      </p>
+      <p>Created by Matias Lazos for <a href="https://nebulas.io/">Nebulas</a>, 2018</p>
+      <p> <span><i class="fab fa-github"></i></span>
+        <a href="https://github.com/mlazos7/QuestioNAS-Blockchain">Source Code </a> </p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="content/bootstrap/popper.min.js.descarga"></script>
+  <script src="content/bootstrap/bootstrap.min.js.descarga"></script>
+  <script src="content/bootstrap/holder.min.js.descarga"></script>
+  
+  <!-- NAS js -->
+  <script src="content/nas/nebPay.js"></script>
+<!--   My custom js -->
+  <script src="content/custom/site.js"></script>
+
+  <div id="extension-kmmojbkhfhninkelnlcnliacgncnnikf-installed"></div>
+  <svg xmlns="http://www.w3.org/2000/svg" width="348" height="225" viewBox="0 0 348 225" preserveAspectRatio="none"
+    style="display: none; visibility: hidden; position: absolute; top: -100%; left: -100%;">
+    <defs>
+      <style type="text/css"></style>
+    </defs>
+    <text x="0" y="17" style="font-weight:bold;font-size:17pt;font-family:Arial, Helvetica, Open Sans, sans-serif">Thumbnail</text>
+  </svg>
 </body>
 
 </html>

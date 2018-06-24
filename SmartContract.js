@@ -1,6 +1,6 @@
 "use strict";
 
-//var contract_address = "n1n6TjekYfXGNkXWFqCBL7Y4eR9TU2bZB18";
+//var contract_address = "n1nPMtWh2KKZCpXsd316WvAf9iwYX8C4ZDz";
 
 var AnswerItem = function(item){
     this.item = item;
@@ -75,11 +75,15 @@ QuestionContract.prototype = {
     },
 
     getQuestion: function (){
+        //returns up to 30 questions
         var question = [];
-        for(var i = this.question_id -1 ; i >= 1 ; i--){
+        for(var i = 1 ; i <= this.question_id -1 ; i++){
             question.push(this.hash_question.get(i));
+            if(i == 30){
+                break;
+            }
         }      
-        return question;
+        return question.reverse();
     },
 
     getMyVotes: function(){
