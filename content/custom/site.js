@@ -1,4 +1,4 @@
-var contract_address = "n1nPMtWh2KKZCpXsd316WvAf9iwYX8C4ZDz"
+var contract_address = "n1oBFQf3yeg6M5PHcjAcWZScnUJXA4Uz9B9"
 var NebPay = require("nebpay")
 var nebPay = new NebPay()
 
@@ -49,7 +49,6 @@ function GetQuestion() {
             cancelTip: undefined,
             container: undefined
         },
-        callback: "https://pay.nebulas.io/api/pay",
         listener: ShowQuestion
     });
 }
@@ -114,7 +113,6 @@ function SubmitVote(e) {
                 cancelTip: undefined,
                 container: undefined
             },
-            callback: "https://pay.nebulas.io/api/pay",
             listener: function (resp) {
                 alert("Your transaction has been submitted");
                 console.log("SubmitVote tx => " + resp.txhash);
@@ -161,7 +159,6 @@ function SubmitQuestion(e) {
             cancelTip: undefined,
             container: undefined
         },
-        callback: "https://pay.nebulas.io/api/pay",
         listener: function (resp) {
             $('#add-question-modal').modal('toggle');
             alert("Your transaction has been submitted");

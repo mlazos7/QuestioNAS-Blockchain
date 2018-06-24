@@ -1,6 +1,7 @@
 "use strict";
 
-//var contract_address = "n1nPMtWh2KKZCpXsd316WvAf9iwYX8C4ZDz";
+//var contract_address_testnet = "n1nPMtWh2KKZCpXsd316WvAf9iwYX8C4ZDz";
+//var contract_address_mainnet = "n1oBFQf3yeg6M5PHcjAcWZScnUJXA4Uz9B9";
 
 var AnswerItem = function(item){
     this.item = item;
@@ -32,7 +33,7 @@ QuestionContract.prototype = {
         var initialQuestion = new QuestionItem(
             this.question_id,
             Blockchain.transaction.from,
-            "Would you like to try 'QuestioNAS' ?",
+            "Would you like to try QuestioNAS?",
             new Array(new AnswerItem("Yes"),new AnswerItem("No"))
         );
 
