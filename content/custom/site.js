@@ -4,9 +4,12 @@ var nebPay = new NebPay()
 
 $(document).ready(function () {
 
+    $('#btn-refresh').click(function () {
+        window.location.reload();
+    });
+
     if (typeof (webExtensionWallet) === "undefined") {
         $('#no-extension').css('display','block');
-        $('#no-extension').css('background','#ffcece');
         return;
     };
 
@@ -57,6 +60,11 @@ function ShowQuestion(resp) {
 
     $('#loading-question').css('display', 'none');
 
+    if(resp.result === "" && resp.execute_err === "contract check failed"){
+        $('#no-extension').text("Switch the NAS extension to mainnet.");
+        $('#no-extension').css('display','block');
+        return;
+    }
     var question = JSON.parse(resp.result);
 
     question.forEach(element => {
