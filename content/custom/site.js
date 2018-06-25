@@ -122,8 +122,14 @@ function SubmitVote(e) {
                 container: undefined
             },
             listener: function (resp) {
-                alert("Your transaction has been submitted");
-                console.log("SubmitVote tx => " + resp.txhash);
+                if(resp === "Error: Transaction rejected by user" ){
+                    alert(resp);
+                    return;
+                }
+                else{
+                    alert("Your transaction has been submitted");
+                    console.log("SubmitVote tx => " + resp.txhash);
+                }
             }
         });
     }
@@ -169,8 +175,14 @@ function SubmitQuestion(e) {
         },
         listener: function (resp) {
             $('#add-question-modal').modal('toggle');
-            alert("Your transaction has been submitted");
-            console.log("SubmitQuestion tx => " + resp.txhash);
+            if(resp === "Error: Transaction rejected by user" ){
+                alert(resp);
+                return;
+            }
+            else{
+                alert("Your transaction has been submitted");
+                console.log("SubmitQuestion tx => " + resp.txhash);
+            }
         }
     });
 }
